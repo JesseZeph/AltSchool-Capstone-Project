@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  password String
+  apiKey   String?  @default(uuid())
+}
+
+model UsedApiKey {
+  id       Int     @id @default(autoincrement())
+  apiKey   String  @unique
+}
+
+model Region {
+  id                 Int                @id @default(autoincrement())
+  country            String
+  president          String
+  name               String             @unique
+  population         Int?
+  description        String?
+  latitude           Float?
+  longitude          Float?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  states             State[]
+  localGovernmentAreas LocalGovernmentArea[]
+}
+
+model State {
+  id                 Int                @id @default(autoincrement())
+  name               String             @unique
+  regionId           Int                
+  population         Int?
+  description        String?
+  gdp                Float?
+  regionName         String?
+  governor           String
+  rulingParty        String?
+  capitalCity        String
+  areaSize           String?
+  senatorialDistrict String[]
+  localGovernmentAreas LocalGovernmentArea[]
+  region             Region             @relation(fields: [regionId], references: [id])
+}
+
+model LocalGovernmentArea {
+  id            Int        @id @default(autoincrement())
+  name          String     @unique
+  stateId       Int        
+  stateName     String?
+  regionName    String?
+  regionId      Int        
+  description   String?
+  population    Int?
+  established   DateTime?
+  region        Region      @relation(fields: [regionId], references: [id])
+  state         State       @relation(fields: [stateId], references: [id])
+}
