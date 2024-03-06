@@ -18,6 +18,6 @@ async function bootstrap() {
     }),
   );
   app.enableCors();
-  app.setGlobalPrefix('api'), await app.listen(3000);
+  app.setGlobalPrefix('api'), await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
