@@ -12,6 +12,11 @@ export class SearchService {
     private readonly lgaService: LocalGovernmentAreaService,
   ) {}
 
+  async searchingRegions(query: string) {
+    const searchedData = await this.search(query);
+    return searchedData;
+  }
+
   async search(query: string): Promise<{
     status: boolean;
     message: string;

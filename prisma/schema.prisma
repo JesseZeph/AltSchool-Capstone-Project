@@ -70,7 +70,7 @@ model LocalGovernmentArea {
   regionId      Int        
   description   String?
   population    Int?
-  established   DateTime?
+  established   String?
   region        Region      @relation(fields: [regionId], references: [id])
   state         State       @relation(fields: [stateId], references: [id])
 }

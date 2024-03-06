@@ -1,7 +1,9 @@
-import { Controller, Get, Query, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { LocalGovernmentArea, Region, State } from '@prisma/client';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
+// @UseInterceptors(CacheInterceptor)
 @Controller('search')
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}

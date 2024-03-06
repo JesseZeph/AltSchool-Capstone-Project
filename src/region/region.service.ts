@@ -1,14 +1,15 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma, Region } from '@prisma/client';
 import { ValidationUtil } from 'utils/validation.util';
-
 @Injectable()
 export class RegionService {
   constructor(private readonly databaseService: DatabaseService) {}
@@ -62,8 +63,18 @@ export class RegionService {
     };
   }
 
+  async getRegions() {
+    console.log('Inside Service');
+    const regionData = await this.findAll();
+    return regionData;
+  }
   async findAll() {
     return this.databaseService.region.findMany();
+  }
+
+  async getRegionsById(id: number) {
+    const regionDataId = await this.findOne(id);
+    return regionDataId;
   }
 
   async findOne(id: number) {

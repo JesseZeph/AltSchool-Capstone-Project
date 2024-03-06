@@ -10,9 +10,22 @@ import { RegionModule } from './region/region.module';
 import { StateModule } from './state/state.module';
 import { LocalGovernmentAreaModule } from './local-government-area/local-government-area.module';
 import { SearchModule } from './search/search.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 30 * 3000,
+      // store: redisStore,
+      // useFactory: async () => ({
+      //   store: redisStore as any,
+      //   host: '127.0.0.1:6379',
+      //   port: 6379,
+      //   ttl: 3000,
+      // }),
+    }),
     ConfigModule.forRoot(),
     AuthModule,
     DatabaseModule,

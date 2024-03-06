@@ -4,9 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { LocalGovernmentArea, Prisma } from '@prisma/client';
-import { DatabaseService } from 'src/database/database.service';
-import { ValidationUtil } from 'utils/validation.util';
-
+import { DatabaseService } from '../database/database.service';
+import { ValidationUtil } from '../../utils/validation.util';
 @Injectable()
 export class LocalGovernmentAreaService {
   constructor(private readonly databaseService: DatabaseService) {}
@@ -63,10 +62,19 @@ export class LocalGovernmentAreaService {
     };
   }
 
-  findAll() {
+  async getLgas() {
+    const cachedData = await this.findAll();
+    return cachedData;
+  }
+
+  async findAll() {
     return this.databaseService.localGovernmentArea.findMany();
   }
 
+  async getLgaById(id: number) {
+    const cachedData = await this.findOne(id);
+    return cachedData;
+  }
   async findOne(id: number) {
     const lgaId = await this.databaseService.localGovernmentArea.findUnique({
       where: {

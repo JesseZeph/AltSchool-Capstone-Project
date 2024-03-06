@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StateService } from './state.service';
 import { Prisma } from '@prisma/client';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
+@UseInterceptors(CacheInterceptor)
 @Controller('state')
 export class StateController {
   constructor(private readonly stateService: StateService) {}

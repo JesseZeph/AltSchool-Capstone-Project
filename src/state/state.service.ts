@@ -60,8 +60,17 @@ export class StateService {
     };
   }
 
+  async getState() {
+    const cachedData = await this.findAll();
+    return cachedData;
+  }
+
   async findAll() {
     return this.databaseService.state.findMany();
+  }
+  async getStateById(id: number) {
+    const cachedData = await this.findOne(id);
+    return cachedData;
   }
 
   async findOne(id: number) {

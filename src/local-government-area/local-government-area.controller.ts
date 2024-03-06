@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { LocalGovernmentAreaService } from './local-government-area.service';
 import { Prisma } from '@prisma/client';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
+// @UseInterceptors(CacheInterceptor)
 @Controller('lga')
 export class LocalGovernmentAreaController {
   constructor(
