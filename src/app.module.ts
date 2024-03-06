@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { LoginAuthModule } from './login-auth/login-auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MyLoggerModule } from './my-logger/my-logger.module';
@@ -12,26 +12,33 @@ import { LocalGovernmentAreaModule } from './local-government-area/local-governm
 import { SearchModule } from './search/search.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import config from './config';
 
 @Module({
   imports: [
-    CacheModule.register({
+    CacheModule.registerAsync({
       isGlobal: true,
-      ttl: 30 * 3000,
-      store: redisStore,
-      // useFactory: async () => ({
-      //   store: redisStore as any,
-      //   host: '127.0.0.1:6379',
-      //   port: 6379,
-      //   ttl: 3000,
-      // }),
+      useFactory: async (config) => {
+        const store = await redisStore({
+          ttl: 30 * 1000,
+          socket: {
+            host: config.get('redis.host'),
+            port: config.get('redis.port'),
+          },
+        });
+        return { store };
+      },
+      inject: [ConfigService],
     }),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [config],
+      isGlobal: true,
+    }),
     AuthModule,
     DatabaseModule,
     LoginAuthModule,
     ThrottlerModule.forRoot([
-      { name: 'short', ttl: 1000, limit: 2 },
+      { name: 'short', ttl: 3000, limit: 5 },
       {
         name: 'long',
         ttl: 60000,
