@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Throttle, SkipThrottle } from '@nestjs/throttler';
 import { Cache } from 'cache-manager';
 
 import { DatabaseService } from 'src/database/database.service';
