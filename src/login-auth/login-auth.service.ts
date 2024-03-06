@@ -20,10 +20,12 @@ export class LoginAuthService {
       },
     };
 
+    const { apiKey, ...userData } = user;
+
     return {
       status: true,
       message: 'Login successful',
-      data: user,
+      data: userData,
       backendTokens: {
         accessToken: await this.jwtService.signAsync(payload, {
           expiresIn: '1h',
@@ -44,7 +46,7 @@ export class LoginAuthService {
       return result;
     }
 
-    throw new UnauthorizedException('username or password is incorrect');
+    throw new UnauthorizedException('Username or password is incorrect');
   }
 
   async refreshToken(user: any) {

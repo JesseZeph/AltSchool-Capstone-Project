@@ -18,7 +18,7 @@ import { redisStore } from 'cache-manager-redis-yet';
     CacheModule.register({
       isGlobal: true,
       ttl: 30 * 3000,
-      // store: redisStore,
+      store: redisStore,
       // useFactory: async () => ({
       //   store: redisStore as any,
       //   host: '127.0.0.1:6379',
@@ -31,7 +31,7 @@ import { redisStore } from 'cache-manager-redis-yet';
     DatabaseModule,
     LoginAuthModule,
     ThrottlerModule.forRoot([
-      { name: 'short', ttl: 3000, limit: 5 },
+      { name: 'short', ttl: 1000, limit: 2 },
       {
         name: 'long',
         ttl: 60000,

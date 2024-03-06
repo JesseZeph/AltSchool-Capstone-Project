@@ -69,8 +69,12 @@ export class RegionService {
     const regionData = await this.findAll();
     return regionData;
   }
-  async findAll() {
-    return this.databaseService.region.findMany();
+  async findAll(page: number = 1, perPage: number = 10) {
+    const skip = (page - 1) * perPage;
+    return this.databaseService.region.findMany({
+      skip,
+      take: perPage,
+    });
   }
 
   async getRegionsById(id: number) {

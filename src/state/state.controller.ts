@@ -8,6 +8,7 @@ import {
   Delete,
   Ip,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { StateService } from './state.service';
 import { Prisma } from '@prisma/client';
@@ -15,6 +16,7 @@ import { Throttle, SkipThrottle } from '@nestjs/throttler';
 
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { MyLoggerService } from '../my-logger/my-logger.service';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
 @UseInterceptors(CacheInterceptor)
 @Controller('state')
@@ -22,6 +24,7 @@ export class StateController {
   constructor(private readonly stateService: StateService) {}
   private readonly logger = new MyLoggerService(StateController.name);
 
+  @UseGuards(JwtGuard)
   @Post('add')
   create(@Body() createStateDto: Prisma.StateCreateInput) {
     return this.stateService.create(createStateDto);
@@ -39,7 +42,7 @@ export class StateController {
     this.logger.log(`Request for ALL \t${ip} address`, StateController.name);
     return this.stateService.findOne(+id);
   }
-
+  @UseGuards(JwtGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -47,7 +50,7 @@ export class StateController {
   ) {
     return this.stateService.update(+id, updateStateDto);
   }
-
+  @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.stateService.remove(+id);

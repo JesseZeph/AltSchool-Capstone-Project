@@ -12,12 +12,20 @@ export class SearchService {
     private readonly lgaService: LocalGovernmentAreaService,
   ) {}
 
-  async searchingRegions(query: string) {
-    const searchedData = await this.search(query);
+  async searchingRegions(
+    query: string,
+    page: number = 1,
+    perPage: number = 10,
+  ) {
+    const searchedData = await this.search(query, page, perPage);
     return searchedData;
   }
 
-  async search(query: string): Promise<{
+  async search(
+    query: string,
+    page: number = 1,
+    perPage: number = 10,
+  ): Promise<{
     status: boolean;
     message: string;
     regions?: Region[];
@@ -34,6 +42,10 @@ export class SearchService {
           regions = (await this.regionService.searchRegions(query)).data;
           states = (await this.stateService.searchStates(query)).data;
           lgas = (await this.lgaService.searchLGAs(query)).data;
+
+          regions = regions.slice((page - 1) * perPage, page * perPage);
+          states = states.slice((page - 1) * perPage, page * perPage);
+          lgas = lgas.slice((page - 1) * perPage, page * perPage);
           break;
 
         default:
