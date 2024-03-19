@@ -65,8 +65,12 @@ export class StateService {
     return cachedData;
   }
 
-  async findAll() {
-    return this.databaseService.state.findMany();
+  async findAll(page: number = 1, perPage: number = 10) {
+    const skip = (page - 1) * perPage;
+    return this.databaseService.state.findMany({
+      skip,
+      take: perPage,
+    });
   }
   async getStateById(id: number) {
     const cachedData = await this.findOne(id);

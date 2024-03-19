@@ -26,7 +26,7 @@ export class AuthService {
 
     if (user) throw new ConflictException('Email duplicated');
 
-    const apiKey = await this.generateUniqueApiKey();
+    const apiKey = this.generateUniqueApiKey();
 
     const hashedPassword = await hash(createAuth.password, 10);
 

@@ -43,7 +43,7 @@ export class LocalGovernmentAreaService {
       ['name'],
       'LocalGovernmentArea',
     );
-    const lga = await this.databaseService.state.findUnique({
+    const lga = await this.databaseService.localGovernmentArea.findUnique({
       where: {
         name: createLocalGovernmentAreaDto.name,
       },
