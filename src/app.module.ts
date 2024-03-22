@@ -20,7 +20,7 @@ import config from './config';
       isGlobal: true,
       useFactory: async (config) => {
         const store = await redisStore({
-          ttl: 30 * 1000,
+          ttl: 35 * 1000,
           socket: {
             host: config.get('redis.host'),
             port: config.get('redis.port'),
@@ -38,7 +38,7 @@ import config from './config';
     DatabaseModule,
     LoginAuthModule,
     ThrottlerModule.forRoot([
-      { name: 'short', ttl: 3000, limit: 5 },
+      { name: 'short', ttl: 3000, limit: 10 },
       {
         name: 'long',
         ttl: 60000,
